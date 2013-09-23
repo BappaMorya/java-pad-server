@@ -12,4 +12,8 @@ public class ServerException extends Exception {
 		return errorCode;
 	}
 
+	public ServerException(int errorCode, Throwable cause) {
+		super(cause);
+	}
+
 }

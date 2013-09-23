@@ -1,6 +1,7 @@
 package in.co.sh00nya.server.simple;
 
 import in.co.sh00nya.cmn.RefConst;
+import in.co.sh00nya.cmn.ServerException;
 
 public class SimpleServer {
 	
@@ -19,7 +20,7 @@ public class SimpleServer {
 		this.port = port;
 	}
 	
-	public void startServer() {
+	public void startServer() throws ServerException {
 		
 	}
 
