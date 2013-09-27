@@ -1,29 +1,13 @@
 package in.co.sh00nya.cmn;
 
 public class ConfigException extends Exception {
-	
-	private StringBuffer buffer = new StringBuffer();
-	
-	{
-		buffer.append("ConfigException: Config failed for -> ");
-	}
-	
-	public void addCfgAttr(String attrName, String value) {
-		buffer.append("[attr: " + attrName + ", val: " + value + "] ");
-	}
-	
-	public void addCfgAttr(String attrName) {
-		buffer.append("[attr: " + attrName + "] ");
+
+	public ConfigException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
-	@Override
-	public String toString() {
-		return buffer.toString();
+	public ConfigException(String message) {
+		super(message);
 	}
-
-	@Override
-	public String getMessage() {
-		return buffer.toString();
-	}
-
+	
 }
