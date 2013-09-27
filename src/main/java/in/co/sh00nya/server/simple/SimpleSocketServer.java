@@ -3,13 +3,18 @@ package in.co.sh00nya.server.simple;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketAddress;
+
+import org.apache.log4j.Logger;
 
 import in.co.sh00nya.cmn.ServerException;
 import in.co.sh00nya.server.IServer;
 import in.co.sh00nya.server.ServerConfig;
 
 public class SimpleSocketServer implements IServer {
+	
+	private static final Logger logger = Logger.getLogger(SimpleSocketServer.class);
 	
 	private volatile boolean isRunning = false;
 	
@@ -24,26 +29,37 @@ public class SimpleSocketServer implements IServer {
 	public void bindServer() throws ServerException {
 		SocketAddress sockAddr = new InetSocketAddress(serverConfig.getHostname(), 
 				serverConfig.getPort());
+		logger.info("Creating server at " + serverConfig);
 		try {
 			serverSock = new ServerSocket();
 			serverSock.bind(sockAddr);
 			isRunning = true;
 		} catch (IOException e) {
-			// TODO error code handling
-			e.printStackTrace();
+			logger.error("Failed to start server", e);
+			throw new ServerException("Failed to start server", e);
 		}
 	}
 
 	public void startServer() throws ServerException {
+		if(isRunning) {
+			try {
+				Socket sock = serverSock.accept();
+				logger.debug("Accepted connection from " + sock);
+			} catch (IOException e) {
+				logger.error("Failed to accept client connection", e);
+				stopServer();
+				throw new ServerException("Failed to accept client connection", e);
+			}
+		}
 	}
 
 	public void stopServer() throws ServerException {
-		if(isRunning) {
-			System.out.println("Shutting down server ...");
+		if(serverSock != null) {
+			logger.info("Shutting down server ...");
 			try {
 				serverSock.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("Failed to shut down server ...", e);
 			}
 		}
 	}
