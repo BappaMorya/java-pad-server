@@ -27,8 +27,8 @@ public class SimpleSocketServer implements IServer {
 	}
 
 	public void bindServer() throws ServerException {
-		SocketAddress sockAddr = new InetSocketAddress(serverConfig.getHostname(), 
-				serverConfig.getPort());
+		SocketAddress sockAddr = new InetSocketAddress(serverConfig.getBindIpAddress(), 
+				serverConfig.getBindPort());
 		logger.info("Creating server at " + serverConfig);
 		try {
 			serverSock = new ServerSocket();

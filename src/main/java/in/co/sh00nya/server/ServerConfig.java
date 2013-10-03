@@ -10,29 +10,40 @@ import in.co.sh00nya.cmn.RefConst;
  */
 public class ServerConfig {
 	
-	private String hostname;
+	private String bindIpAddress = RefConst.DEFAULT_SERVER_BIND_ADDRESS;
 	
-	private int port = RefConst.DEFAULT_SERVER_PORT;
+	private int bindPort = RefConst.DEFAULT_SERVER_PORT;
+	
+	private String serverHandlerClass = null;
 
-	public String getHostname() {
-		return hostname;
+	public String getBindIpAddress() {
+		return bindIpAddress;
 	}
 
-	public void setHostname(String hostname) {
-		this.hostname = hostname;
+	public void setBindIpAddress(String bindIpAddress) {
+		this.bindIpAddress = bindIpAddress;
 	}
 
-	public int getPort() {
-		return port;
+	public int getBindPort() {
+		return bindPort;
 	}
 
-	public void setPort(int port) {
-		this.port = port;
+	public void setBindPort(int bindPort) {
+		this.bindPort = bindPort;
+	}
+
+	public String getServerHandlerClass() {
+		return serverHandlerClass;
+	}
+
+	public void setServerHandlerClass(String serverHandlerClass) {
+		this.serverHandlerClass = serverHandlerClass;
 	}
 
 	@Override
 	public String toString() {
-		return "ServerConfig [hostname=" + hostname + ", port=" + port + "]";
+		return "ServerConfig [bindIpAddress=" + bindIpAddress + ", bindPort="
+				+ bindPort + ", serverHandlerClass=" + serverHandlerClass + "]";
 	}
 
 }
