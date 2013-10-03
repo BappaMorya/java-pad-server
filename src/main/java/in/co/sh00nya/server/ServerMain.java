@@ -56,18 +56,21 @@ public class ServerMain {
 		try {
 			Class<IServer> handlerClass = (Class<IServer>) Class.forName(cfg.getServerHandlerClass());
 			server = handlerClass.newInstance();
+			server.setConfig(cfg);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			logger.error("Failed to load server handler class", e);
 			System.exit(-1);
 		}
 		
 		// Register shutdown trigger
+		logger.info("Registering shutdown hook ...");
 		ServerShutdownTrigger shutdownTrigger = new ServerShutdownTrigger();
 		shutdownTrigger.setServer(server);
 		Thread shutdownThread = new Thread(shutdownTrigger);
 		Runtime.getRuntime().addShutdownHook(shutdownThread);
 		
 		// Start server thread
+		logger.info("Starting server ...");
 		ServerMT serverMt = new ServerMT();
 		serverMt.setCfg(cfg);
 		serverMt.setServer(server);

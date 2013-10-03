@@ -43,6 +43,7 @@ public class SimpleSocketServer implements IServer {
 	public void startServer() throws ServerException {
 		if(isRunning) {
 			try {
+				logger.info("Starting to accept client connections ...");
 				Socket sock = serverSock.accept();
 				logger.debug("Accepted connection from " + sock);
 			} catch (IOException e) {
