@@ -61,6 +61,12 @@ public class ServerMain {
 			System.exit(-1);
 		}
 		
+		// Register shutdown trigger
+		ServerShutdownTrigger shutdownTrigger = new ServerShutdownTrigger();
+		shutdownTrigger.setServer(server);
+		Thread shutdownThread = new Thread(shutdownTrigger);
+		Runtime.getRuntime().addShutdownHook(shutdownThread);
+		
 		// Start server thread
 		ServerMT serverMt = new ServerMT();
 		serverMt.setCfg(cfg);
