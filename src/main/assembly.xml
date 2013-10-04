@@ -8,15 +8,16 @@
     <format>zip</format>
   </formats>
   <fileSets>
-    <!-- fileSet>
-      <directory>${project.basedir}</directory>
+    <fileSet>
+      <directory>${project.basedir}/src/main/java</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
+        <include>*log4j.properties</include>
+        <include>*server_config.properties</include>
         <include>README*</include>
-        <include>LICENSE*</include>
         <include>NOTICE*</include>
       </includes>
-    </fileSet-->
+    </fileSet>
     <fileSet>
       <directory>${project.build.directory}</directory>
       <outputDirectory>/</outputDirectory>

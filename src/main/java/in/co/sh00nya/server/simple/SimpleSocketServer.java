@@ -8,6 +8,7 @@ import java.net.SocketAddress;
 
 import org.apache.log4j.Logger;
 
+import in.co.sh00nya.cmn.DataProcessUnit;
 import in.co.sh00nya.cmn.ServerException;
 import in.co.sh00nya.server.IServer;
 import in.co.sh00nya.server.ServerConfig;
@@ -41,15 +42,32 @@ public class SimpleSocketServer implements IServer {
 	}
 
 	public void startServer() throws ServerException {
-		if(isRunning) {
+		while (isRunning) {
+			Socket clientSock = null;
 			try {
 				logger.info("Starting to accept client connections ...");
-				Socket sock = serverSock.accept();
-				logger.debug("Accepted connection from " + sock);
+				clientSock = serverSock.accept();
+				logger.debug("Accepted connection from " + clientSock);
 			} catch (IOException e) {
 				logger.error("Failed to accept client connection", e);
 				stopServer();
 				throw new ServerException("Failed to accept client connection", e);
+			}
+			
+			if(clientSock != null) {
+				// Start reading data from client
+				try {
+					DataProcessUnit.processData(clientSock.getInputStream(), clientSock.getOutputStream());
+				} catch (IOException e) {
+					logger.error("Failed to read from client stream", e);
+					throw new ServerException("Failed to read from client stream", e);
+				} finally {
+					try {
+						clientSock.close();
+					} catch (IOException e) {
+						logger.warn("Failed to client connection", e);
+					}
+				}
 			}
 		}
 	}
