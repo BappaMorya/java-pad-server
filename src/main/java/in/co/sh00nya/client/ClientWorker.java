@@ -100,14 +100,11 @@ public class ClientWorker implements Runnable {
 				ous.write("$CHECK$".getBytes());
 				ous.flush();
 				processTime += System.currentTimeMillis() - startTime;
-				logger.info("Processing time = " + processTime + " ms");
 				count = readCount(ins);
-				logger.debug("Received count = " + count + " i = " + i + ", req = " + cfg.getReqPerThread());
+				logger.debug("Received count = " + count);
 			}
 			ous.write("%STOP%$CHECK$".getBytes());
 			ous.flush();
-			clientSock.shutdownOutput();
-			clientSock.shutdownInput();
 		} catch (IOException e) {
 			logger.error("Failed to get connection to server ...", e);
 			completionTriggerLatch.countDown();
@@ -129,6 +126,7 @@ public class ClientWorker implements Runnable {
 			} catch (IOException e) {
 				logger.warn("Failed to close client connection", e);
 			}
+			completionTriggerLatch.countDown();
 		}
 		
 	}
