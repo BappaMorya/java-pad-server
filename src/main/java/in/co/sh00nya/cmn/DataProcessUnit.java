@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 /**
  * Processes incoming data using special protocol as follows:
  * <Text Line>$CHECK$<Text Line>$CHECK$ %STOP%$CHECK$ ....
- * At each $CHECK$, we send back count till that point as $<count>$ and reset counter
+ * At each $CHECK$, we send back count till that point as <count>$ and reset counter
  * %STOP%$CHECK$ marks end of data
  * 
  * @author Siddharth_Godbole
@@ -31,19 +31,23 @@ public class DataProcessUnit {
 	 * @param ous
 	 * @throws IOException
 	 */
-	public static void processData(InputStream ins, OutputStream ous) throws IOException {
+	public static void processData(InputStream ins, OutputStream ous)
+			throws IOException {
 		logger.info("Processing data from client ...");
 		InputStreamReader inReader = new InputStreamReader(ins);
-		String partialData = readUntil(inReader, CHECK_TOKEN);
-		if(partialData.endsWith(STOP_TOKEN)) {
-			logger.debug("Received signal to stop processing ...");
-			ins.close();
-			ous.close();
-		} else {
-			int wordCount = WordCountUtil.countWord(partialData);
-			logger.debug("Sending partial count (" + wordCount + ") back");
-			ous.write(makeCheckResponse(wordCount).getBytes());
-			ous.flush();
+		while (true) {
+			String partialData = readUntil(inReader, CHECK_TOKEN);
+			if (partialData.endsWith(STOP_TOKEN)) {
+				logger.debug("Received signal to stop processing ...");
+				ins.close();
+				ous.close();
+				break;
+			} else {
+				int wordCount = WordCountUtil.countWord(partialData);
+				logger.debug("Sending partial count (" + wordCount + ") back");
+				ous.write(makeCheckResponse(wordCount).getBytes());
+				ous.flush();
+			}
 		}
 	}
 	
@@ -66,7 +70,7 @@ public class DataProcessUnit {
 	
 	private static String makeCheckResponse(int count) {
 		StringBuilder builder = new StringBuilder();
-		builder.append('$').append(count).append('$');
+		builder.append(count).append('$');
 		return builder.toString();
 	}
 

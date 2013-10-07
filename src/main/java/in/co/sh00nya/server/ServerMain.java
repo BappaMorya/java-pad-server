@@ -22,7 +22,6 @@ public class ServerMain {
 		Properties props = new Properties();
 		InputStream ins = ServerMain.class.getClassLoader().getResourceAsStream("server_config.properties");
 		if(ins != null) {
-			System.out.println("Loading config file ...");
 			try {
 				props.load(ins);
 			} catch (IOException e) {

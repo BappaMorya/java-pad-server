@@ -14,8 +14,8 @@
       <includes>
         <include>*log4j.properties</include>
         <include>*server_config.properties</include>
-        <include>README*</include>
-        <include>NOTICE*</include>
+        <include>*client_config.properties</include>
+        <include>*lines.dat</include>
       </includes>
     </fileSet>
     <fileSet>
