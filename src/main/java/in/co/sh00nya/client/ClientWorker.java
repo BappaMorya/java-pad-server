@@ -140,6 +140,8 @@ public class ClientWorker implements Runnable {
 			completionTriggerLatch.countDown();
 		}
 		
+		logger.info("Finished firing cycle ...");
+		
 	}
 	
 	public int readCount(Reader reader) throws IOException {
