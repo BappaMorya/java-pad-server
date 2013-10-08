@@ -96,9 +96,11 @@ public class ClientMain {
 		
 		// Read statistics
 		for(ClientWorker worker : workerList) {
-			logger.info("Worker-" + worker.getWorkerId() + " Accept Time: " 
-					+ worker.getAcceptTime() + " ms" + ", Process time: " + worker.getProcessTime()
-					+ ", First Request Time: " + worker.getFirstRequestTime() + " ms");
+			float rps = (float) cfg.getReqPerThread() * (float) 1000 / (float) worker.getProcessTime();
+			logger.info("Worker-" + worker.getWorkerId() + " Req / Second = " + rps 
+					+ ", Accept Time: " 
+					+ worker.getAcceptTime() + " ms, Process time: " + worker.getProcessTime()
+					+ " ms, First Request Time: " + worker.getFirstRequestTime() + " ms");
 			totalAcceptTime += worker.getAcceptTime();
 			if(worker.getAcceptTime() < minTotalAcceptTime)
 				minTotalAcceptTime = worker.getAcceptTime();
