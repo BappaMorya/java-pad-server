@@ -33,9 +33,15 @@ public class ClientWorker implements Runnable {
 	
 	private long processTime = 0L;
 	
+	private long firstRequestTime = 0L;
+	
 	private Random randIndexGen = new Random();
 	
 	private DataStore store = null;
+
+	public long getFirstRequestTime() {
+		return firstRequestTime;
+	}
 
 	public int getWorkerId() {
 		return workerId;
@@ -77,6 +83,7 @@ public class ClientWorker implements Runnable {
 			long startTime = System.currentTimeMillis();
 			clientSock.connect(new InetSocketAddress(cfg.getServerHost(), cfg.getServerPort()));
 			acceptTime = System.currentTimeMillis() - startTime;
+			logger.info("Connected ...");
 			
 			if(cfg.isSyncFire()) {
 				logger.info("Waiting for other workers to sync ...");
@@ -94,13 +101,17 @@ public class ClientWorker implements Runnable {
 			logger.info("Starting server fire cycle ...");
 			
 			int count = 0;
+			long endTime = 0L;
 			for(int i=0; i<cfg.getReqPerThread(); i++) {
 				startTime = System.currentTimeMillis();
 				ous.write(store.getDataLine(randIndexGen.nextInt(store.size())).getBytes());
 				ous.write("$CHECK$".getBytes());
 				ous.flush();
-				processTime += System.currentTimeMillis() - startTime;
 				count = readCount(ins);
+				endTime = System.currentTimeMillis();
+				processTime += (endTime - startTime);
+				if(i == 0)
+					firstRequestTime = endTime - startTime;
 				logger.debug("Received count = " + count);
 			}
 			ous.write("%STOP%$CHECK$".getBytes());

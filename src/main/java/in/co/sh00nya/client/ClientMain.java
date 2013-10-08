@@ -92,11 +92,13 @@ public class ClientMain {
 		long totalProcessTime = 0L;
 		long minTotalProcessTime = Long.MAX_VALUE;
 		long maxTotalProcessTime = 0L;
+		long maxFirstRequestTime = 0L;
 		
 		// Read statistics
 		for(ClientWorker worker : workerList) {
 			logger.info("Worker-" + worker.getWorkerId() + " Accept Time: " 
-					+ worker.getAcceptTime() + " ms" + ", Process time: " + worker.getProcessTime());
+					+ worker.getAcceptTime() + " ms" + ", Process time: " + worker.getProcessTime()
+					+ ", First Request Time: " + worker.getFirstRequestTime() + " ms");
 			totalAcceptTime += worker.getAcceptTime();
 			if(worker.getAcceptTime() < minTotalAcceptTime)
 				minTotalAcceptTime = worker.getAcceptTime();
@@ -107,10 +109,13 @@ public class ClientMain {
 				minTotalProcessTime = worker.getProcessTime();
 			if(worker.getProcessTime() > maxTotalProcessTime)
 				maxTotalProcessTime = worker.getProcessTime();
+			if(worker.getFirstRequestTime() > maxFirstRequestTime)
+				maxFirstRequestTime = worker.getFirstRequestTime();
 		}
 		
 		float avgTotalAcceptTime = (float) totalAcceptTime / (float) cfg.getNoOfThreads();
 		float avgTotalProcessTime = (float) totalProcessTime / (float) cfg.getNoOfThreads();
+		logger.info("Max first request time = " + maxFirstRequestTime + " ms");
 		logger.info("Min Accept time: " + minTotalAcceptTime + " ms Max Accept time: " + maxTotalAcceptTime
 				+ " ms Avg Accept Time: " + avgTotalAcceptTime + " ms");
 		logger.info("Min Process time: " + minTotalProcessTime + " ms Max Process time: " + maxTotalProcessTime
