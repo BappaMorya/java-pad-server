@@ -75,6 +75,7 @@ public class ServerMain {
 		serverMt.setServer(server);
 		
 		Thread serverThread = new Thread(serverMt);
+		serverThread.setName("ServerMain");
 		serverThread.start();
 		try {
 			serverThread.join();
