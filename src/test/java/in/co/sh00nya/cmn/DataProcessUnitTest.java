@@ -39,5 +39,17 @@ public class DataProcessUnitTest {
 		}
 		Assert.assertEquals(ret, "asda sd ad6a8s &&** ");
 	}
+	
+	@Test
+	public void testStringUtil() {
+		String data = "this is a small line.$CHECK$";
+		Assert.assertEquals(5, DataProcessUnit.processData(data));
+	}
+	
+	@Test
+	public void testStringUtilWithStop() {
+		String data = "%STOP%$CHECK$";
+		Assert.assertEquals(-1, DataProcessUnit.processData(data));
+	}
 
 }

@@ -21,9 +21,9 @@ public class DataProcessUnit {
 	
 	private static final Logger logger = Logger.getLogger(DataProcessUnit.class);
 	
-	private static final String CHECK_TOKEN = "$CHECK$";
+	public static final String CHECK_TOKEN = "$CHECK$";
 	
-	private static final String STOP_TOKEN = "%STOP%";
+	public static final String STOP_TOKEN = "%STOP%";
 
 	/**
 	 * See class comments to understand protocol
@@ -68,7 +68,27 @@ public class DataProcessUnit {
 		}
 	}
 	
-	private static String makeCheckResponse(int count) {
+	/**
+	 * Returns unique word count word, returns -1 if its a stop signal
+	 * @param data
+	 * @return
+	 */
+	public static int processData(String data) {
+		String tempData = data.substring(0, data.indexOf(CHECK_TOKEN)).trim();
+		if(tempData.length() > 0) {
+			if(tempData.equals(STOP_TOKEN))
+				return -1;
+			else
+				return WordCountUtil.countWord(tempData);
+		}
+		return -1;
+	}
+	
+	public static String getSubData(String data) {
+		return data.substring(data.indexOf(CHECK_TOKEN) + CHECK_TOKEN.length()).trim();
+	}
+	
+	public static String makeCheckResponse(int count) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(count).append('$');
 		return builder.toString();

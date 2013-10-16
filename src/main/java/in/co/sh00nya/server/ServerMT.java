@@ -35,6 +35,8 @@ public class ServerMT implements Runnable {
 		try {
 			server.bindServer();
 		} catch (ServerException e) {
+			logger.error("Failed to bind server to " + cfg.getBindIpAddress() 
+					+ ":" + cfg.getBindPort(), e);
 			stopServer(e);
 			return;
 		}
@@ -49,8 +51,6 @@ public class ServerMT implements Runnable {
 	}
 	
 	public void stopServer(Exception e) {
-		logger.error("Failed to bind server to " + cfg.getBindIpAddress() 
-				+ ":" + cfg.getBindPort(), e);
 		try {
 			server.stopServer();
 		} catch (ServerException e1) {

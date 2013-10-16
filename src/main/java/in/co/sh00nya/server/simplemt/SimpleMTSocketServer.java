@@ -3,7 +3,6 @@ package in.co.sh00nya.server.simplemt;
 import in.co.sh00nya.cmn.ServerException;
 import in.co.sh00nya.server.IServer;
 import in.co.sh00nya.server.ServerConfig;
-import in.co.sh00nya.server.simple.SimpleSocketServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -15,7 +14,7 @@ import org.apache.log4j.Logger;
 
 public class SimpleMTSocketServer implements IServer {
 
-private static final Logger logger = Logger.getLogger(SimpleSocketServer.class);
+private static final Logger logger = Logger.getLogger(SimpleMTSocketServer.class);
 	
 	private volatile boolean isRunning = false;
 	
