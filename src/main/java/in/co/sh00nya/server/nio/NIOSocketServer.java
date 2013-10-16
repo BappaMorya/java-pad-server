@@ -86,9 +86,6 @@ public class NIOSocketServer implements IServer {
 					} else if ((selKey.readyOps() & SelectionKey.OP_READ) == SelectionKey.OP_READ) {
 						SocketChannel sockChan = (SocketChannel) selKey.channel();
 						dataBuffer.clear();
-						logger.debug("Before Capacity = " + dataBuffer.capacity()
-								+ ", Position = " + dataBuffer.position()
-								+ ", Limit = " + dataBuffer.limit());
 						int bytesRead = 0;
 						while(true) {
 							bytesRead = sockChan.read(dataBuffer);
@@ -101,15 +98,8 @@ public class NIOSocketServer implements IServer {
 							
 							byte[] data = new byte[dataBuffer.limit()];
 							
-							logger.debug("After read from channel Capacity = " + dataBuffer.capacity()
-									+ ", Position = " + dataBuffer.position()
-									+ ", Limit = " + dataBuffer.limit());
-							
 							dataBuffer.get(data);
 							
-							logger.debug("After get Capacity = " + dataBuffer.capacity()
-									+ ", Position = " + dataBuffer.position()
-									+ ", Limit = " + dataBuffer.limit());
 							StringBuilder dataBuilder = dataCache.get(sockChan.getRemoteAddress().toString());
 							dataBuilder.append(new String(data));
 							logger.debug("Received string = " + String.valueOf(data));
@@ -117,33 +107,18 @@ public class NIOSocketServer implements IServer {
 							logger.debug("Whole string = " + wholeString);
 							if(wholeString.endsWith(DataProcessUnit.CHECK_TOKEN)) {
 								dataBuffer.clear();
-								logger.debug("Before write Capacity = " + dataBuffer.capacity()
-										+ ", Position = " + dataBuffer.position()
-										+ ", Limit = " + dataBuffer.limit());
 								int count = DataProcessUnit.processData(wholeString);
 								if(count == -1) {
-									logger.debug("Word Count = -1");
 									dataCache.remove(sockChan.getRemoteAddress().toString());
 									sockChan.close();
 									selKey.cancel();
 									break;
 								} else {
-									logger.debug("Word Count = " + count);
 									dataBuilder.setLength(0);
 									dataBuilder.append(DataProcessUnit.getSubData(wholeString));
 									dataBuffer.put(DataProcessUnit.makeCheckResponse(count).getBytes());
 									dataBuffer.flip();
-									logger.debug("After write Capacity = "
-											+ dataBuffer.capacity()
-											+ ", Position = "
-											+ dataBuffer.position()
-											+ ", Limit = " + dataBuffer.limit());
 									sockChan.write(dataBuffer);
-									logger.debug("After send Capacity = "
-											+ dataBuffer.capacity()
-											+ ", Position = "
-											+ dataBuffer.position()
-											+ ", Limit = " + dataBuffer.limit());
 								}
 							}
 						}
