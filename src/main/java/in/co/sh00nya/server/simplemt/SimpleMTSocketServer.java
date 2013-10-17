@@ -41,6 +41,7 @@ private static final Logger logger = Logger.getLogger(SimpleMTSocketServer.class
 	}
 
 	public void startServer() throws ServerException {
+		int i = 1;
 		while (isRunning) {
 			Socket clientSock = null;
 			try {
@@ -57,7 +58,8 @@ private static final Logger logger = Logger.getLogger(SimpleMTSocketServer.class
 				// Start reading data from client in new thread
 				SimpleMTWorker worker = new SimpleMTWorker(clientSock);
 				Thread workerThread = new Thread(worker);
-				workerThread.setName(Thread.currentThread().getName() + "-MTWorker");
+				workerThread.setName(Thread.currentThread().getName() + "-MTWorker" + i);
+				i++;
 				workerThread.start();
 			}
 		}
