@@ -76,7 +76,7 @@ public class NIOSocketServer implements IServer {
 						ServerSocketChannel ssc = (ServerSocketChannel) selKey.channel();
 						SocketChannel sockChan = ssc.accept();
 						sockChan.configureBlocking(false);
-						logger.debug("Accepted connection from " + sockChan.socket());
+						logger.info("Accepted connection from " + sockChan.socket());
 						
 						// register selector with new channel for read operation
 						SelectionKey readSockKey = sockChan.register(sel, SelectionKey.OP_READ, sockChan.getRemoteAddress().toString());

@@ -66,6 +66,7 @@ public class ServerMain {
 		ServerShutdownTrigger shutdownTrigger = new ServerShutdownTrigger();
 		shutdownTrigger.setServer(server);
 		Thread shutdownThread = new Thread(shutdownTrigger);
+		shutdownThread.setName("ShutdownThread");
 		Runtime.getRuntime().addShutdownHook(shutdownThread);
 		
 		// Start server thread
