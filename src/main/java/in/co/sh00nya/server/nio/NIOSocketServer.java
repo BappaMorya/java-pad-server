@@ -31,8 +31,6 @@ public class NIOSocketServer implements IServer {
 	
 	private Selector sel = null;
 	
-	private ByteBuffer dataBuffer = ByteBuffer.allocate( 1024 );
-	
 	private Map<String, StringBuilder> dataCache = new HashMap<String, StringBuilder>();
 	
 	@Override
@@ -85,6 +83,7 @@ public class NIOSocketServer implements IServer {
 						itr.remove();
 					} else if ((selKey.readyOps() & SelectionKey.OP_READ) == SelectionKey.OP_READ) {
 						SocketChannel sockChan = (SocketChannel) selKey.channel();
+						ByteBuffer dataBuffer = ByteBuffer.allocate( 1024 );
 						dataBuffer.clear();
 						int bytesRead = 0;
 						while(true) {
